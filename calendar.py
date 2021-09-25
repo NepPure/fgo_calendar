@@ -8,14 +8,14 @@ import re
 import traceback
 
 HELP_STR = '''
-崩3活动日历
-崩3日历 : 查看本群订阅服务器日历
-崩3日历 on/off : 订阅/取消订阅指定服务器的日历推送
-崩3日历 time 时:分 : 设置日历推送时间
-崩3日历 status : 查看本群日历推送设置
+fgo活动日历
+fgo日历 : 查看本群订阅服务器日历
+fgo日历 on/off : 订阅/取消订阅指定服务器的日历推送
+fgo日历 time 时:分 : 设置日历推送时间
+fgo日历 status : 查看本群日历推送设置
 '''.strip()
 
-sv = hoshino.Service('崩3日历', help_=HELP_STR, bundle='崩3日历')
+sv = hoshino.Service('fgo日历', help_=HELP_STR, bundle='fgo日历')
 
 group_data = {}
 
@@ -54,7 +54,7 @@ async def send_calendar(group_id):
             msg = f'[CQ:image,file={base64_str}]'
         else:
             msg = f'[CQ:cardimage,file={base64_str}]'
-        for _ in range(5):  # 失败重试5次
+        for _ in range(3):  # 失败重试3次
             try:
                 await bot.send_group_msg(group_id=int(group_id), message=msg)
                 sv.logger.info(f'群{group_id}推送{server}日历成功')
@@ -79,7 +79,7 @@ def update_group_schedule(group_id):
     )
 
 
-@sv.on_rex(r'^崩坏?[3三]日[历程](.*)')
+@sv.on_rex(r'^[fF][gG][oO]日[历程](.*)')
 async def start_scheduled(bot, ev):
     group_id = str(ev['group_id'])
     server = 'cn'
@@ -101,17 +101,16 @@ async def start_scheduled(bot, ev):
             }
         if not hoshino.priv.check_priv(ev, hoshino.priv.ADMIN):
             return
-            msg = '权限不足'
         elif 'on' in cmd:
             if server not in group_data[group_id]['server_list']:
                 group_data[group_id]['server_list'].append(server)
             save_data()
-            msg = f'崩3日程推送已开启'
+            msg = f'fgo日程推送已开启'
         elif 'off' in cmd:
             if server in group_data[group_id]['server_list']:
                 group_data[group_id]['server_list'].remove(server)
             save_data()
-            msg = f'崩3日程推送已关闭'
+            msg = f'fgo日程推送已关闭'
         elif 'time' in cmd:
             match = re.search(r'(\d*):(\d*)', cmd)
             if not match or len(match.groups()) < 2:
@@ -133,7 +132,6 @@ async def start_scheduled(bot, ev):
             save_data()
         else:
             return
-            msg = '指令错误'
         update_group_schedule(group_id)
         save_data()
     await bot.send(ev, msg)

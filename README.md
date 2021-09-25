@@ -1,7 +1,5 @@
 # fgo_calendar
 
-# 开发中 莫慌
-
 FGO图形化活动日历插件，Fork的公主连接版本，适用于 `HoshinoBot v2`.
 
 项目地址 <https://github.com/NepPure/fgo_calendar>
@@ -10,11 +8,11 @@ FGO图形化活动日历插件，Fork的公主连接版本，适用于 `HoshinoB
 
 <https://github.com/NepPure/genshin_calendar>
 
-![calendar](preview.gif)
+![calendar](preview.png)
 
 ## 日程信息源
 
-官网新闻
+官网新闻，正则匹配的，没有识别出日期的就直接过滤了
 
 ## 安装方法
 
