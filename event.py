@@ -104,6 +104,7 @@ async def load_event_cn():
                 continue
 
             detail = content_result['data']['content']
+            # 小编不讲武德 时间就不识别了
             searchObj = re.search(
                 r'(\d+)年(\d+)月(\d+)日.*?[~|～].*?(\d+)月(\d+)日', detail, re.M | re.I)
 
@@ -123,9 +124,9 @@ async def load_event_cn():
             eyear = smonth > emonth and syear+1 or syear
 
             start_time = datetime.strptime(
-                f'{syear}-{smonth}-{sday}', r"%Y-%m-%d")
+                f'{syear}-{smonth}-{sday} 00:00:00', r"%Y-%m-%d  %H:%M:%S")
             end_time = datetime.strptime(
-                f'{eyear}-{emonth}-{eday}', r"%Y-%m-%d")
+                f'{eyear}-{emonth}-{eday} 23:59:59', r"%Y-%m-%d  %H:%M:%S")
             event = {'title': item['title'],
                      'start': start_time,
                      'end': end_time,
