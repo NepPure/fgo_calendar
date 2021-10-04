@@ -30,7 +30,7 @@ ignored_ann_ids = [
 
 ]
 
-list_api = 'https://api.biligame.com/news/list.action?gameExtensionId=45&positionId=2&pageNum=1&pageSize=30&typeId='
+list_api = 'https://api.biligame.com/news/list.action?gameExtensionId=45&positionId=2&pageNum=1&pageSize=15&typeId='
 detail_api = 'https://api.biligame.com/news/%s.action'
 
 
@@ -65,7 +65,7 @@ def cache(ttl=timedelta(hours=1), arg_key=None):
     return wrap
 
 
-@cache(ttl=timedelta(hours=12), arg_key='url')
+@cache(ttl=timedelta(hours=3), arg_key='url')
 async def query_data(url):
     try:
         async with aiohttp.ClientSession() as session:
