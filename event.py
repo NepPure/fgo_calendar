@@ -106,7 +106,7 @@ async def load_event_cn():
             detail = content_result['data']['content']
             # 小编不讲武德 时间就不识别了
             searchObj = re.search(
-                r'(\d+)年(\d+)月(\d+)日.*?[~|～].*?(\d+)月(\d+)日', detail, re.M | re.I)
+                r'.*?(\d{4,}).*?年.*?(\d+).*?月.*?(\d+).*?日.*?[~|～].*?.*?(\d+).*?月.*?(\d+).*?日', detail, re.M | re.I)
 
             try:
                 datelist = searchObj.groups()  # ('2021', '9', '17', '9', '17')
