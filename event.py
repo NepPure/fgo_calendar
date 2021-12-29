@@ -30,7 +30,7 @@ ignored_ann_ids = [
 
 ]
 
-list_api = 'https://api.biligame.com/news/list.action?gameExtensionId=45&positionId=2&pageNum=1&pageSize=15&typeId='
+list_api = 'https://api.biligame.com/news/list.action?gameExtensionId=45&positionId=2&pageNum=1&pageSize=20&typeId='
 detail_api = 'https://api.biligame.com/news/%s.action'
 
 
@@ -106,7 +106,7 @@ async def load_event_cn():
             detail = content_result['data']['content']
             # 小编不讲武德 时间就不识别了
             searchObj = re.search(
-                r'.*?(\d{4,}).*?年.*?(\d+).*?月.*?(\d+).*?日.*?[~|～].*?.*?(\d+).*?月.*?(\d+).*?日', detail, re.M | re.I)
+                r'(\d{4,})年(\d+)月(\d+)日.*?[~|～].*?(\d+)月(\d+)日', detail, re.M | re.I)
 
             try:
                 datelist = searchObj.groups()  # ('2021', '9', '17', '9', '17')
@@ -123,10 +123,14 @@ async def load_event_cn():
             eday = int(datelist[4])
             eyear = smonth > emonth and syear+1 or syear
 
-            start_time = datetime.strptime(
-                f'{syear}-{smonth}-{sday} 00:00:00', r"%Y-%m-%d  %H:%M:%S")
-            end_time = datetime.strptime(
-                f'{eyear}-{emonth}-{eday} 23:59:59', r"%Y-%m-%d  %H:%M:%S")
+            try:
+                start_time = datetime.strptime(
+                    f'{syear}-{smonth}-{sday} 00:00:00', r"%Y-%m-%d  %H:%M:%S")
+                end_time = datetime.strptime(
+                    f'{eyear}-{emonth}-{eday} 23:59:59', r"%Y-%m-%d  %H:%M:%S")
+            except Exception as e:
+                continue
+
             event = {'title': item['title'],
                      'start': start_time,
                      'end': end_time,
